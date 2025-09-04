@@ -10,3 +10,4 @@ Route::get('/user', function (Request $request) {
 
 Route::get('/machines', [MachineController::class, 'index']);
 
+Route::get('/machines/{id}', [MachineController::class, 'show']);
