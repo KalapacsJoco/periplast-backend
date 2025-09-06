@@ -2,20 +2,17 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
-class Machine extends Model
+class Tool extends Model
 {
-    use HasFactory;
-
     protected $guarded = [];
 
-
-    public function orders()
+    public function machines()
     {
-        return $this->hasMany(Order::class);
+        return $this->belongsToMany(Machine::class, 'machine_tool')
+            ->withTimestamps();
     }
 
     public function maintenanceRecords()
@@ -23,10 +20,14 @@ class Machine extends Model
         return $this->morphMany(MaintenanceRecord::class, 'maintainable');
     }
 
-    public function tools()
+    public function inserts()
     {
-        return $this->belongsToMany(Tool::class, 'machine_tool')
-            ->withTimestamps();
+        return $this->hasMany(Insert::class);
+    }
+
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
     }
 
     public function errorLogs(): MorphToMany
