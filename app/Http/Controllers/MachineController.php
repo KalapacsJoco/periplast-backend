@@ -64,4 +64,20 @@ class MachineController extends Controller
             'order' => $order
         ]);
     }
+
+    public function stop(Machine $machine)
+    {
+        // Update machine status to stopped
+        $machine->update(['status' => 'stopped']);
+
+        return response()->json(['message' => 'Machine stopped successfully']);
+    }
+
+    public function resume(Machine $machine)
+    {
+        // Update machine status to running or whatever your normal status is
+        $machine->update(['status' => 'running']);
+
+        return response()->json(['message' => 'Machine resumed successfully']);
+    }
 }

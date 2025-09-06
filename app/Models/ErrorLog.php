@@ -15,21 +15,27 @@ class ErrorLog extends Model
         'description',
         'status',
         'solution',
-        'fixed_at'
+        'fixed_at',
+        'stopped_at',
+        'resumed_at'
     ];
 
     protected $casts = [
         'fixed_at' => 'datetime',
+        'stopped_at' => 'datetime',
+        'resumed_at' => 'datetime',
     ];
 
     const STATUS_ACTUAL = 'actual';
     const STATUS_FIXED = 'fixed';
+    const STATUS_STOPPED = 'stopped';
 
     public static function getStatuses(): array
     {
         return [
             self::STATUS_ACTUAL,
             self::STATUS_FIXED,
+            self::STATUS_STOPPED,
         ];
     }
 
@@ -55,6 +61,53 @@ class ErrorLog extends Model
     public function scopeFixed($query)
     {
         return $query->where('status', self::STATUS_FIXED);
+    }
+
+    // Scope for stopped errors
+    public function scopeStopped($query)
+    {
+        return $query->where('status', self::STATUS_STOPPED);
+    }
+
+    // Helper method to mark error as stopped
+    public function markAsStopped(): void
+    {
+        $this->update([
+            'status' => self::STATUS_STOPPED,
+            'stopped_at' => now(),
+            'resumed_at' => null,
+        ]);
+    }
+
+    // Helper method to resume from stopped state
+    public function markAsResumed(): void
+    {
+        $this->update([
+            'status' => self::STATUS_ACTUAL,
+            'resumed_at' => now(),
+        ]);
+    }
+
+    // Helper method to check if error is stopped
+    public function isStopped(): bool
+    {
+        return $this->status === self::STATUS_STOPPED;
+    }
+
+    // Helper method to get downtime duration
+    public function getDowntimeDuration(): ?string
+    {
+        if ($this->stopped_at && $this->resumed_at) {
+            $diff = $this->stopped_at->diff($this->resumed_at);
+            return $diff->format('%H:%I:%S');
+        }
+
+        if ($this->stopped_at) {
+            $diff = $this->stopped_at->diff(now());
+            return $diff->format('%H:%I:%S');
+        }
+
+        return null;
     }
 
     // Helper method to mark error as fixed

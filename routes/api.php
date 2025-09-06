@@ -22,3 +22,6 @@ Route::post('/machines/{machine}/error-logs', [MachineErrorLogController::class,
 // Error log routes
 Route::put('/error-logs/{errorLog}', [ErrorLogController::class, 'update']);
 Route::delete('/error-logs/{errorLog}', [ErrorLogController::class, 'destroy']);
+
+Route::post('/machines/{machine}/stop', [MachineController::class, 'stop']);
+Route::post('/machines/{machine}/resume', [MachineController::class, 'resume']);
