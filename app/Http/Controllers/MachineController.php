@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\MachineStatus;
 use App\Models\Machine;
 use App\Models\Order;
 use Illuminate\Http\JsonResponse;
@@ -68,7 +69,7 @@ class MachineController extends Controller
     public function available(Machine $machine)
     {
         // Update machine status to available
-        $machine->update(['status' => 'availabe']);
+        $machine->update(['status' => MachineStatus::AVAILABLE]);
 
         return response()->json(['message' => 'Available status set successfully']);
     }
@@ -76,7 +77,7 @@ class MachineController extends Controller
     public function stop(Machine $machine)
     {
         // Update machine status to stopped
-        $machine->update(['status' => 'stopped']);
+        $machine->update(['status' => MachineStatus::STOPPED]);
 
         return response()->json(['message' => 'Machine stopped successfully']);
     }
@@ -84,7 +85,7 @@ class MachineController extends Controller
     public function working(Machine $machine)
     {
         // Update machine status to running or whatever your normal status is
-        $machine->update(['status' => 'working']);
+        $machine->update(['status' => MachineStatus::WORKING]);
 
         return response()->json(['message' => 'Machine resumed successfully']);
     }
@@ -92,7 +93,7 @@ class MachineController extends Controller
     public function warning(Machine $machine)
     {
         // Update machine status to warning or whatever your normal status is
-        $machine->update(['status' => 'warning']);
+        $machine->update(['status' => MachineStatus::WARNING]);
 
         return response()->json(['message' => 'Warning status set successfully']);
     }
@@ -100,7 +101,7 @@ class MachineController extends Controller
     public function under_setup(Machine $machine)
     {
         // Update machine status to warning or whatever your normal status is
-        $machine->update(['status' => 'under_setup']);
+        $machine->update(['status' => MachineStatus::UNDER_SETUP]);
 
         return response()->json(['message' => 'Under setup status set successfully']);
     }
