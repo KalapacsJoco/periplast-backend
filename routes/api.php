@@ -23,5 +23,8 @@ Route::post('/machines/{machine}/error-logs', [MachineErrorLogController::class,
 Route::put('/error-logs/{errorLog}', [ErrorLogController::class, 'update']);
 Route::delete('/error-logs/{errorLog}', [ErrorLogController::class, 'destroy']);
 
+Route::post('/machines/{machine}/available', [MachineController::class, 'available']);
+Route::post('/machines/{machine}/working', [MachineController::class, 'working']);
+Route::post('/machines/{machine}/under_setup', [MachineController::class, 'under_setup']);
 Route::post('/machines/{machine}/stop', [MachineController::class, 'stop']);
-Route::post('/machines/{machine}/resume', [MachineController::class, 'resume']);
+Route::post('/machines/{machine}/warning', [MachineController::class, 'warning']);

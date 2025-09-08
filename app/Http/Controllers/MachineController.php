@@ -65,6 +65,14 @@ class MachineController extends Controller
         ]);
     }
 
+    public function available(Machine $machine)
+    {
+        // Update machine status to available
+        $machine->update(['status' => 'availabe']);
+
+        return response()->json(['message' => 'Available status set successfully']);
+    }
+
     public function stop(Machine $machine)
     {
         // Update machine status to stopped
@@ -73,11 +81,27 @@ class MachineController extends Controller
         return response()->json(['message' => 'Machine stopped successfully']);
     }
 
-    public function resume(Machine $machine)
+    public function working(Machine $machine)
     {
         // Update machine status to running or whatever your normal status is
-        $machine->update(['status' => 'running']);
+        $machine->update(['status' => 'working']);
 
         return response()->json(['message' => 'Machine resumed successfully']);
+    }
+
+    public function warning(Machine $machine)
+    {
+        // Update machine status to warning or whatever your normal status is
+        $machine->update(['status' => 'warning']);
+
+        return response()->json(['message' => 'Warning status set successfully']);
+    }
+
+    public function under_setup(Machine $machine)
+    {
+        // Update machine status to warning or whatever your normal status is
+        $machine->update(['status' => 'under_setup']);
+
+        return response()->json(['message' => 'Under setup status set successfully']);
     }
 }

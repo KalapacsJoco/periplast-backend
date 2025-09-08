@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
+use App\Enums\MachineStatus; // Add this import
 
 class Machine extends Model
 {
@@ -12,6 +13,10 @@ class Machine extends Model
 
     protected $guarded = [];
 
+    // Add this cast to automatically convert the status to the enum
+    protected $casts = [
+        'status' => MachineStatus::class,
+    ];
 
     public function orders()
     {
@@ -44,5 +49,31 @@ class Machine extends Model
     public function fixedErrorLogs(): MorphToMany
     {
         return $this->errorLogs()->where('status', ErrorLog::STATUS_FIXED);
+    }
+
+    // Add scope methods for filtering by status
+    public function scopeAvailable($query)
+    {
+        return $query->where('status', MachineStatus::AVAILABLE->value);
+    }
+
+    public function scopeWorking($query)
+    {
+        return $query->where('status', MachineStatus::WORKING->value);
+    }
+
+    public function scopeWarning($query)
+    {
+        return $query->where('status', MachineStatus::WARNING->value);
+    }
+
+    public function scopeStopped($query)
+    {
+        return $query->where('status', MachineStatus::STOPPED->value);
+    }
+
+    public function scopeUnderSetup($query)
+    {
+        return $query->where('status', MachineStatus::UNDER_SETUP->value);
     }
 }
